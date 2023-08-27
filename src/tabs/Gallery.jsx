@@ -11,11 +11,18 @@ export class Gallery extends Component {
   };
 
   handleSubmit = value => {
-    this.setState({ query: value });
+    this.setState({
+      query: value,
+      images: [],
+      page: 1,
+    });
   };
 
   componentDidUpdate(_, prevState) {
-    if (prevState.query !== this.state.query) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
       this.fetch();
     }
   }
@@ -36,6 +43,10 @@ export class Gallery extends Component {
     }
   };
 
+  handleButtonLoadMoreClick = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
   render() {
     const { images } = this.state;
 
@@ -54,6 +65,11 @@ export class Gallery extends Component {
             </GridItem>
           ))}
         </Grid>
+        {images.length !== 0 && (
+          <Button type="button" onClick={this.handleButtonLoadMoreClick}>
+            Load more
+          </Button>
+        )}
       </>
     );
   }
